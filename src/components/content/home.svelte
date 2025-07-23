@@ -65,14 +65,10 @@
 
 	// Start the effect on mount
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 	
 	onMount(() => {
-		if (browser) {
-			console.log('Home onMount fired');
-			showHero = true;
-			typeProfession();
-		}
+		showHero = true;
+		typeProfession();
 	});
 </script>
 
@@ -343,20 +339,5 @@
 		#intro {
 			margin-top: 15px;
 		}
-	}
-
-	.gradient-text {
-		background: linear-gradient(
-			0deg,
-			hsl(221, 83%, 53%),
-			hsl(43, 96%, 56%)
-		);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.hero-gradient {
-		background: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(215, 25%, 27%) 50%, hsl(215, 20%, 65%) 100%);
 	}
 </style>

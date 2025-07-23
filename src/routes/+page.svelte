@@ -2,6 +2,7 @@
     import Navigation from "../components/header/navigation.svelte";
 	import Home from "../components/content/home.svelte";
 	import About from "../components/content/about.svelte";
+	import Skills from "../components/content/skills.svelte";
 </script>
 
 
@@ -9,6 +10,7 @@
 	<Navigation />
 	<Home />
 	<About />
+	<Skills />
 </section>
 
 <style>
@@ -43,6 +45,52 @@
 		flex-direction: column;
 		width: 100vw;
 		max-width:100%;
+	}
+
+	:global(.gradient-text) {
+		background: linear-gradient(
+			0deg,
+			hsl(221, 83%, 53%),
+			hsl(43, 96%, 56%)
+		);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	:global(.hero-gradient) {
+		background: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(215, 25%, 27%) 50%, hsl(215, 20%, 65%) 100%);
+	}
+
+	:global(.glass-effect) {
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	section :global(h2) {
+		margin-top: 10vh;
+		font-size: 3rem;
+		color: rgb(30 41 59 / var(--tw-text-opacity, 1));
+
+		display: flex;
+		flex-direction: column;
+
+		align-items: center;
+		justify-content: center;
+	}
+
+	section :global(h2::after) {
+		content: "";
+		display: inline-block;
+		width: 60%;
+		height: 5px;
+
+		background: linear-gradient(
+			135deg,
+			hsl(221, 83%, 53%),
+			hsl(43, 96%, 56%)
+		);
 	}
 
 	

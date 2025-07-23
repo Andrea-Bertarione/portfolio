@@ -164,23 +164,6 @@
 		}
 	}
 
-	.gradient-text {
-		background: linear-gradient(
-			135deg,
-			hsl(221, 83%, 53%),
-			hsl(43, 96%, 56%)
-		);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.glass-effect {
-		background: rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(10px);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-	}
-
 	.hero-gradient {
 		background: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(215, 25%, 27%) 50%, hsl(215, 20%, 65%) 100%);
 	  }
