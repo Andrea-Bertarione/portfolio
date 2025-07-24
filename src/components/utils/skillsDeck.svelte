@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
+
     let skills = [
         {
             name: "JavaScript / TypeScript",
@@ -82,19 +83,81 @@
         }
     ];
 
-    const deckIndex = 0;
-    const currentCard = skills[deckIndex];
+
+    let deckIndex = 0;
+    let currentCard = skills[deckIndex];
+    let sideLeft = skills[skills.length - 1];
+    let sideRight = skills[deckIndex + 1];
     currentCard.focussed = "focussed";
+    sideLeft.focussed = "right";
+    sideRight.focussed = "left";
+
+
+    const updateCardIndex = (direction) => {
+        if (direction === 'next') {
+            deckIndex = (deckIndex + 1) % skills.length;
+        } else if (direction === 'prev') {
+            deckIndex = deckIndex - 1 < 0 ? skills.length - 1 : deckIndex - 1;
+        }
+
+
+        currentCard.animation = direction === 'next' ? 'animateRight' : 'animateLeft';
+        sideLeft.animation = direction === 'next' ? 'animateRight' : 'animateLeft';
+        sideRight.animation = direction === 'next' ? 'animateRight' : 'animateLeft';
+
+
+        setTimeout(updateState, 500);
+        setTimeout(() => {
+            currentCard.animation = '';
+            sideLeft.animation = '';
+            sideRight.animation = '';
+        }, 500);
+    }
+
+
+    const updateState = () => {
+        currentCard.focussed = "";
+        sideLeft.focussed = "";
+        sideRight.focussed = "";
+
+
+        currentCard = skills[deckIndex];
+        sideLeft = skills[deckIndex - 1 < 0 ? skills.length - 1 : deckIndex - 1];
+        sideRight = skills[(deckIndex + 1) % skills.length];
+
+
+        currentCard.focussed = "focussed";
+        sideLeft.focussed = "right";
+        sideRight.focussed = "left";
+
+
+        skills = [...skills];
+    }
+
 
     onMount(() => {
-        
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                updateCardIndex('next');
+            } else if (e.key === 'ArrowLeft') {
+                updateCardIndex('prev');
+            }
+        });
+
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('left') || e.target.classList.contains('right')) {
+                updateCardIndex(e.target.classList.contains('left') ? 'next' : 'prev');
+            }
+        });
     });
 </script>
+
 
 <div class="SkillsContainer">
     <div class="skillsDeck">
         {#each skills as skill, index}
-            <div class="skillCard {skill.focussed}" id={index}>
+            <div class="skillCard {skill.focussed} {skill.animation}" id={index}>
                 <img src={skill.icon} alt={skill.name} class="skillIcon" />
                 <h3>{skill.name}</h3>
                 <p class="skillLevel">{skill.level}</p>
@@ -104,44 +167,71 @@
     </div>
 </div>
 
+
 <style>
     .SkillsContainer {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
+        margin-left: 30px;
+        margin-right: 30px;
         margin-bottom: 50px;
     }
 
-    .skillsDeck {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        width: 100%;
 
+    .skillsDeck {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        max-width: 700px;
+        margin: 0 auto;
+        align-items: center;
     }
+
 
     .skillCard {
         display: none;
+        justify-content: center;
+        align-items: center;
         background: white;
         border-radius: 10px;
-        padding: 20px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        width: calc(25% - 20px);
-        height: 50vh;
+        width: 100%;
+        min-height: 350px; /* or whatever fits your design */
         text-align: center;
+        box-sizing: border-box;
     }
 
+
     .focussed {
-        display: block;
-        animation: fadeIn 0.5s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        grid-area: 1 / 2 / 2 / 3;
     }
+
+
+    .right {
+        display: flex;
+        flex-direction: column;
+        grid-area: 1 / 3 / 2 / 4;
+        transform: scaleX(0.7) scaleY(0.8);
+    }
+
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        grid-area: 1 / 1 / 2 / 2;
+        transform: scaleX(0.7) scaleY(0.8);
+    }
+
 
     .skillIcon {
         width: 50px;
         height: 50px;
     }
+
 
     .skillLevel {
         font-weight: bold;

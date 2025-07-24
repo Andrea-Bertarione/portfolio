@@ -15,5 +15,8 @@
 		"svelte-match-media": "^1.2.1",
 		"vite": "^4.5.1"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"vercel": "^44.5.3"
+	}
 }

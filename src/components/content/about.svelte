@@ -136,15 +136,15 @@
 	.textWrapper .textContainer .mainText {
 		font-weight: 400;
 		color: rgb(71 85 105);
-		font-size: 0.9rem;
+		font-size: 1vw;
 	}
 
 	#CVDownload {
 		position: fixed;
-		bottom: 10px;
-		right: 24px;
-		width: 200px;
-		height: 50px;
+		bottom: 2%;
+		right: 1.5%;
+		width: 13%;
+		height: 9%;
 		z-index: 50;
 
 		background: hsl(221, 83%, 53%);
@@ -157,6 +157,12 @@
 
 		box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 		transition: opacity 0.2s;
+	}
+
+	@media (min-width: 1800px) {
+		.textWrapper .textContainer .mainText { 
+			font-size: 4vw;
+		}
 	}
 
 	@media (max-width: 680px) {
@@ -178,6 +184,10 @@
 		.textWrapper .textContainer {
 			width: 80%;
 			height: 40vh;
+		}
+
+		.textWrapper .textContainer .mainText { 
+			font-size: 4vw;
 		}
 
 		#CVDownload {
