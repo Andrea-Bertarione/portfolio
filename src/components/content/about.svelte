@@ -15,7 +15,6 @@
 
 	const extendText = () => {
 
-		console.log("tesada")
 		if (!extended) {
 			aboutMe = aboutText({ age, experience, extended: true });
 			extended = true;
@@ -55,6 +54,8 @@
 	onMount(() => {
 		showHero = true;
 		
+		window.addEventListener('resize', resized);
+		resized();
 		observer = new IntersectionObserver(
 			([entry]) => {
 				sectionVisible = entry.isIntersecting;
@@ -101,22 +102,20 @@
 		align-items: center;
 
 		max-width:100%;
-		width: 100vw;
 	}
 
 	.textWrapper {
 		display: flex;
 		width: 100%;
-		height: 90vh;
 
 		gap: 30px;
 
 		justify-content: space-around;
-		align-items: center;
+		align-items: flex-start;
 	}
 
 	.textWrapper img {
-		width: 35vw;
+		width: 25vw;
 		height: 70vh;
 
 		margin-bottom: 20vh;
@@ -124,16 +123,15 @@
 
 		border-radius: 30px;
 		box-shadow: 0px 0px 15px 13px rgba(0,0,0,0.6);
+
 	}
 
 	.textWrapper .textContainer {
 		width: 55vw;
-		height: 70vh;
-
-		margin-bottom: 25vh;
 	}
 
 	.textWrapper .textContainer .mainText {
+
 		font-weight: 400;
 		color: rgb(71 85 105);
 		font-size: 1vw;
@@ -176,14 +174,13 @@
 
 		.textWrapper img {
 			width: 70vw;
-			height: 80vh;
+			height: 60vh;
 
 			margin-bottom: 5vh;
 		}
 
 		.textWrapper .textContainer {
 			width: 80%;
-			height: 40vh;
 		}
 
 		.textWrapper .textContainer .mainText { 
