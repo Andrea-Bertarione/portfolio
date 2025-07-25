@@ -123,8 +123,34 @@
         return 'background-color: #ccc;';
     };
 
+    function hexToRgb(hex) {
+        hex = hex.replace(/^#/, "");
+        if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+        const num = parseInt(hex, 16);
+        return [num >> 16, (num >> 8) & 0xff, num & 0xff];
+    }
+
+    function darken(rgb, percent) {
+        return rgb.map(c => Math.round(c * (1 - percent)));
+    }
+
+    function lighten(rgb, percent) {
+        return rgb.map(c => Math.round(c + (255 - c) * percent));
+    }
+
+    function moreNoticableGradient(hex) {
+        const base = hexToRgb(hex);
+        const dark = darken(base, 0.25);
+        const light = lighten(base, 0.4);
+        const baseStr = base.join(',');
+        const lightStr = light.join(',');
+        const darkStr = dark.join(',');
+
+        // Noticeable stops: base (5%) -> light highlight (45%) -> dark (90%)
+        return `background: linear-gradient(135deg, rgba(${baseStr},1) 5%, rgba(${lightStr},0.9) 45%, rgba(${darkStr},1) 90%);`;
+    }
     const getCardBg = (skill) => {
-        return `background: linear-gradient(135deg, ${skill.color} 0%, ${skill.color} 100%);`;
+        return moreNoticableGradient(skill.color);
     }
 
 
@@ -265,7 +291,6 @@
         display: none;
         justify-content: center;
         align-items: center;
-        background: white;
         border-radius: 30px;
         border: 15px solid #b6b6b6;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
