@@ -119,7 +119,7 @@
 		height: 70vh;
 
 		margin-bottom: 20vh;
-		min-width: 380px;
+		min-width: 350px;
 
 		border-radius: 30px;
 		box-shadow: 0px 0px 15px 13px rgba(0,0,0,0.6);
@@ -159,7 +159,7 @@
 
 	@media (min-width: 1800px) {
 		.textWrapper .textContainer .mainText { 
-			font-size: 4vw;
+			font-size: 1vw;
 		}
 	}
 
@@ -170,6 +170,7 @@
 
 		.textWrapper {
 			flex-direction: column;
+			align-items: center;
 		}
 
 		.textWrapper img {

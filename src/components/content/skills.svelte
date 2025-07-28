@@ -23,7 +23,11 @@
         progress = Math.floor(Math.min((elapsed / time) * 100, 100));
 
         if (progress >= 100) {
-            skillsDeckRef.updateCardIndex('next');
+            if (window.innerWidth < 600) {
+                skillsDeckRef.updateCardIndex('prev');
+            } else {
+                skillsDeckRef.updateCardIndex('next');
+            }
             setTimeout(() => {
                 progress = 0;
                 startTime = null;
@@ -185,5 +189,17 @@
 
     .hidden {
         display: none;
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            margin-top: 3vh;
+            margin-bottom: 3vh;
+        }
+        #playBar {
+            width: 80%;
+            bottom: 2%;
+            left: 10%;
+        }
     }
 </style>

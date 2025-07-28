@@ -240,6 +240,7 @@
             if (leftCard) {
                 updateCardIndex('next');
             } else if (rightCard) {
+                if (window.innerWidth < 600) { return; }
                 updateCardIndex('prev');
             }
         });
@@ -520,5 +521,125 @@
         to {
             transform: scaleX(0.7) scaleY(0.8) rotate3d(0, 1, 0, -35deg);
         }
+    }
+
+    @media (max-width: 600px) {
+        .SkillsContainer {
+            width: 100%;
+            margin-left: 0;
+            padding-right: 20px;
+            margin-bottom: 20vh;
+            overflow: hidden
+        }
+        .skillsDeck {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.25rem;
+            width: 70vw;
+            height: 60vh;
+            max-width: 750px;
+            margin: 0 auto;
+            align-items: center;
+            perspective: 1200px;
+            pointer-events: none;
+        }
+
+        .focussed {
+            width: 100%;
+            transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg) translateX(20px) translateY(5px);
+            z-index: 2;
+        }
+
+        .skillsDeck > .right {
+            grid-area: 1 / 2 / 2 / 3;
+            transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg) translateX(40px) translateY(10px);
+            z-index: 1;
+        }
+
+        .skillsDeck > .left {
+            grid-area: 1 / 2 / 2 / 3;
+            transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg);
+            z-index: 3;
+        }
+
+        .skillsDeck > .left:hover {
+            animation: none;
+        }
+        .skillsDeck > .right:hover {
+            animation: none;
+        }
+
+        .skillsDeck > .next, .skillsDeck > .prev {
+            opacity:0; 
+            grid-area: 1 / 2 / 2 / 3;
+            transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg);
+        }
+
+        .skillsDeck > .prev {
+            z-index: 4;
+        }
+
+        .skillCard {
+            min-height: 475px;
+            max-height: 550px;
+        }
+
+        .iconCircle {
+            width: 60px;
+            height: 60px;
+        }
+
+        .skillIcon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .next.animateRight {
+            animation: animateNextRight 0.5s;
+        }
+
+        .prev.animateLeft {
+            animation: animatePrevLeft 0.5s;
+        }
+
+        @keyframes animateRightCurrent {
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(40px) translateY(10px); }
+        }
+        @keyframes animateLeftCurrent {
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg); }
+        }
+
+
+        @keyframes animateRightSide2 {
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(20px) translateY(5px); }
+        }
+        @keyframes animateLeftSide {
+        100% { transform: translateX(20px) translateY(5px) rotate3d(0,1,0,-10deg); }
+        }
+
+
+        @keyframes animateRightSide {
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(80px) translateY(20px); opacity: 0; }
+        }
+        @keyframes animateLeftSide2 {
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateY(-110%); opacity: 0; }
+        }
+
+
+        @keyframes animateNextRight {
+        0%   { transform: translateX(80px) translateY(20px) rotate3d(0,1,0,-10deg); opacity:0; }
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(40px) translateY(10px); opacity:1; }
+        }
+
+        @keyframes animatePrevLeft {
+        0%   { transform: translateY(-110%) rotate3d(0,1,0,-10deg); opacity:0; }
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg); opacity:1; }
+        }
+
+        /* △ Users preferring reduced motion get instant swaps */
+        @media (prefers-reduced-motion:reduce) {
+        .skillCard { animation:none !important; transition:none !important; }
+        }
+
     }
 </style>
