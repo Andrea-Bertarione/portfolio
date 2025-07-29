@@ -1,6 +1,4 @@
 <script>
-	import { run } from 'svelte/legacy';
-
 	import { onMount } from 'svelte';
 	import aboutText from "../data/aboutme"
 	import { fade  } from 'svelte/transition';
@@ -26,7 +24,7 @@
 	}
 
 	const resized = () => {
-		if (window.innerWidth < 680) {
+		if (window.innerWidth <= 820) {
 			aboutMe = aboutMe.substring(0, 300) + "<span id='extenderRead' style='color: #0087f8; cursor: pointer; font-weight: 600'>... Read more</span>";
 			window.addEventListener("click", (e) => {
 				if (e.target.id === "extenderRead") {
@@ -106,6 +104,8 @@
 		align-items: center;
 
 		max-width:100%;
+		min-height: 100vh;
+
 	}
 
 	.textWrapper {
@@ -138,7 +138,7 @@
 
 		font-weight: 400;
 		color: rgb(71 85 105);
-		font-size: 1vw;
+		font-size: 1.2rem;
 	}
 
 	#CVDownload {
@@ -161,13 +161,29 @@
 		transition: opacity 0.2s;
 	}
 
-	@media (min-width: 1800px) {
+	@media (max-width: 1366px) {
+		.textWrapper {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.textWrapper img {
+			width: 40vw;
+			height: 30vh;
+
+			margin-bottom: 1vh;
+		}
+
+		.textWrapper .textContainer {
+			width: 90%;
+		}
+
 		.textWrapper .textContainer .mainText { 
-			font-size: 1vw;
+			font-size: 1 rem;
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (max-width: 820px) {
 		section h2 {
 			margin-top: 10vh;
 		}
@@ -189,7 +205,7 @@
 		}
 
 		.textWrapper .textContainer .mainText { 
-			font-size: 4vw;
+			font-size: 1.1rem;
 		}
 
 		#CVDownload {

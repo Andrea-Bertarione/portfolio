@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { swipe } from 'svelte-gestures';
+    import { tick } from 'svelte';
 
     let skills = $state([
         {
@@ -153,104 +154,76 @@
         return moreNoticableGradient(skill.color);
     }
 
+    let index           = $state(0);           // deck pointer
+    let animRunning     = $state(false); 
 
-    let deckIndex = 0;
-    let currentCard = skills[deckIndex];
-    let sideLeft = skills[skills.length - 1];
-    let sideRight = skills[deckIndex + 1];
-    currentCard.focussed = "focussed";
-    sideLeft.focussed = "right";
-    sideRight.focussed = "left";
+    let total            = $state(skills.length);
+    let leftIndex        = $derived((index - 1 + total) % total);
+    let rightIndex       = $derived((index + 1) % total);
 
-    let animRunning = false;
+    let prevIndex        = $derived((index - 2 + total) % total);
+    let nextIndex        = $derived((index + 2) % total);
 
-    export const updateCardIndex = (direction) => {
+    let focus = $derived(
+        skills.map((_, i) =>
+            i === index      ? 'focussed' :
+            i === leftIndex  ? 'right'    :
+            i === rightIndex ? 'left'     : ''
+        )
+    );
+
+    let animation = $state(Array(total).fill(''));
+
+    export async function updateCardIndex(dir /* 'next' | 'prev' */) {
         if (animRunning) return;
         animRunning = true;
 
-        if (direction === 'next') {
-            deckIndex = (deckIndex + 1) % skills.length;
-            skills[(deckIndex + 1) % skills.length].focussed = "prev";
-            skills[(deckIndex + 1) % skills.length].animation = 'animateLeft';
-            setTimeout(() => {
-                skills[(deckIndex + 1) % skills.length].focussed = "";
-                skills[(deckIndex + 1) % skills.length].animation = '';
-            }, 500);
-        } else if (direction === 'prev') {
-            deckIndex = deckIndex - 1 < 0 ? skills.length - 1 : deckIndex - 1;
-            skills[(deckIndex - 1 + skills.length) % skills.length].focussed = "next";
-            skills[(deckIndex - 1 + skills.length) % skills.length].animation = 'animateRight';
-            setTimeout(() => {
-                skills[(deckIndex - 1 + skills.length) % skills.length].focussed = "";
-                skills[(deckIndex - 1 + skills.length) % skills.length].animation = '';
-            }, 500);
+        const outgoing  = dir === 'next' ? rightIndex : leftIndex;
+
+        const motion = dir === 'next' ? 'animateRight'  : 'animateLeft';
+
+        animation[outgoing]  = motion;
+        animation[index]    = motion;
+        animation[leftIndex] = motion;
+        animation[rightIndex]= motion;
+
+        if (dir === 'next') {
+            focus[nextIndex] = 'next';
+            animation[nextIndex] = motion;
+        } else {
+            focus[prevIndex] = 'prev';
+            animation[prevIndex] = motion;
         }
 
+        await new Promise(r => setTimeout(r, 500));
 
-        currentCard.animation = direction == 'next' ? 'animateRight' : 'animateLeft';
-        sideLeft.animation = direction == 'next' ? 'animateRight' : 'animateLeft';
-        sideRight.animation = direction == 'next' ? 'animateRight' : 'animateLeft';
+        focus[nextIndex] = '';
+        focus[prevIndex] = '';
 
-        skills = [...skills];
+        index = dir === 'next'
+            ? (index + 1) % total
+            : (index - 1 + total) % total;
 
-        setTimeout(updateState, 500);
-        setTimeout(() => {
-            currentCard.animation = '';
-            sideLeft.animation = '';
-            sideRight.animation = '';
-        }, 490);
-    }
-
-
-    const updateState = () => {
-        currentCard.focussed = "";
-        sideLeft.focussed = "";
-        sideRight.focussed = "";
-
-
-        currentCard = skills[deckIndex];
-        sideLeft = skills[deckIndex - 1 < 0 ? skills.length - 1 : deckIndex - 1];
-        sideRight = skills[(deckIndex + 1) % skills.length];
-
-
-        currentCard.focussed = "focussed";
-        sideLeft.focussed = "right";
-        sideRight.focussed = "left";
-
-
-        skills = [...skills];
+        animation = Array(total).fill('');
         animRunning = false;
     }
 
-    function handlerSwipe(event) {
-        direction = event.detail.direction;
-        target = event.detail.target;
-        pointerType = event.detail.pointerType;
-
+    function handlerSwipe(e) {
+        const { direction } = e.detail;
         if (window.innerWidth < 600) {
-            if (direction === 'top') {
-                updateCardIndex('next');
-            } else if (direction === 'bottom') {
-                updateCardIndex('prev');
-            }
-        }
-        else {
-            if (direction === 'left') {
-                updateCardIndex('next');
-            } else if (direction === 'right') {
-                updateCardIndex('prev');
-            }
+            direction === 'top'    && updateCardIndex('prev');
+            direction === 'bottom' && updateCardIndex('next');
+        } else {
+            direction === 'left'   && updateCardIndex('prev');
+            direction === 'right'  && updateCardIndex('next');
         }
     }
 
 
     onMount(() => {
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                updateCardIndex('next');
-            } else if (e.key === 'ArrowLeft') {
-                updateCardIndex('prev');
-            }
+        window.addEventListener('keydown', e => {
+            e.key === 'ArrowRight' && updateCardIndex('next');
+            e.key === 'ArrowLeft'  && updateCardIndex('prev');
         });
 
 
@@ -269,10 +242,14 @@
 </script>
 
 
-<div class="SkillsContainer" >
-    <div class="skillsDeck" >
-        {#each skills as skill, index}
-            <div class="skillCard {skill.focussed} {skill.animation}" style="{getCardBg(skill)}" id={index}>
+<div class="SkillsContainer" use:swipe={()=>({ timeframe: 300, minSwipeDistance: 100})} onswipe={handlerSwipe} >
+    <div class="skillsDeck"  >
+        {#each skills as skill, i}
+            <div
+            class={`skillCard ${focus[i]} ${animation[i]}`}
+            aria-current={focus[i] === 'focussed'}
+            style="{getCardBg(skill)}" id={i}
+            >
                 <div class="iconCircle">
                     <img src={skill.icon} alt={skill.name} class="skillIcon" />
                 </div>
@@ -302,7 +279,9 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
-        max-width: 750px;
+        max-width: 1050px;
+        width: 60vw;
+        height: 70vh;
         margin: 0 auto;
         align-items: center;
         perspective: 1200px;
@@ -317,14 +296,16 @@
         border: 15px solid #b6b6b6;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         width: 100%;
+        height: 100%;
         min-height: 350px;
-        max-height: 400px;
         text-align: center;
         box-sizing: border-box;
         transition: transform 0.25s ease;
     }
 
     .skillName {
+        font-size: 1.5rem;
+        font-weight: 600;
         text-shadow: 2px 0 #000000, -2px 0 #000000, 0 2px #000000, 0 -2px #000000,
              1px 1px #000000, -1px -1px #000000, 1px -1px #000000, -1px 1px #000000;
     }
@@ -339,7 +320,7 @@
     }
 
     .skillDescription {
-        font-size: 14px;
+        font-size: 1.1rem;
         text-shadow: 2px 0 #000000, -2px 0 #000000, 0 2px #000000, 0 -2px #000000,
              1px 1px #000000, -1px -1px #000000, 1px -1px #000000, -1px 1px #000000;
     }
@@ -427,7 +408,7 @@
     .next {
         display: flex;
         flex-direction: column;
-        grid-area: 1 / 3 / 2 / 4;
+        grid-area: 1 / 1 / 2 / 2;
         transform-style: preserve-3d;
         transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, -90deg);
     }
@@ -435,7 +416,7 @@
     .prev {
         display: flex;
         flex-direction: column;
-        grid-area: 1 / 1 / 2 / 2;
+        grid-area: 1 / 3 / 2 / 4;
         transform-style: preserve-3d;
         transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, 90deg);
     }
@@ -528,19 +509,19 @@
 
     @keyframes animateNextRight {
         from {
-            transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, 90deg);
+            transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, -90deg);
         }
         to {
-            transform: scaleX(0.7) scaleY(0.8) rotate3d(0, 1, 0, 35deg);
+            transform: scaleX(0.7) scaleY(0.8) rotate3d(0, 1, 0, -35deg);
         }
     }
 
     @keyframes animatePrevLeft {
         from {
-            transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, -90deg);
+            transform: scaleX(0.4) scaleY(0.6) rotate3d(0, 1, 0, 90deg);
         }
         to {
-            transform: scaleX(0.7) scaleY(0.8) rotate3d(0, 1, 0, -35deg);
+            transform: scaleX(0.7) scaleY(0.8) rotate3d(0, 1, 0, 35deg);
         }
     }
 
@@ -549,7 +530,7 @@
             width: 100%;
             margin-left: 0;
             padding-right: 20px;
-            padding-bottom: 15vh;
+            padding-bottom: 10vh;
             overflow: hidden
         }
         .skillsDeck {
@@ -568,19 +549,19 @@
         .focussed {
             width: 100%;
             transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg) translateX(20px) translateY(5px);
-            z-index: 2;
+            z-index: 3;
         }
 
         .skillsDeck > .right {
             grid-area: 1 / 2 / 2 / 3;
             transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg) translateX(40px) translateY(10px);
-            z-index: 1;
+            z-index: 2;
         }
 
         .skillsDeck > .left {
             grid-area: 1 / 2 / 2 / 3;
             transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg);
-            z-index: 3;
+            z-index: 4;
         }
 
         .skillsDeck > .left:hover {
@@ -596,8 +577,12 @@
             transform: scaleX(1) scaleY(1) rotate3d(0, 1, 0, -10deg);
         }
 
+        .skillsDeck > .next {
+            z-index: 5;
+        }
+
         .skillsDeck > .prev {
-            z-index: 4;
+            z-index: 1;
         }
 
         .skillCard {
@@ -616,11 +601,11 @@
         }
 
         .next.animateRight {
-            animation: animateNextRight 0.5s;
+            animation: animateNextRight 0.5s forwards;
         }
 
         .prev.animateLeft {
-            animation: animatePrevLeft 0.5s;
+            animation: animatePrevLeft 0.5s forwards;
         }
 
         @keyframes animateRightCurrent {
@@ -643,24 +628,34 @@
         100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(80px) translateY(20px); opacity: 0; }
         }
         @keyframes animateLeftSide2 {
-        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateY(-110%); opacity: 0; }
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateY(-70%); opacity: 0; }
         }
 
 
         @keyframes animateNextRight {
-        0%   { transform: translateX(80px) translateY(20px) rotate3d(0,1,0,-10deg); opacity:0; }
-        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(40px) translateY(10px); opacity:1; }
+        0%   { transform: translateY(-70%) rotate3d(0,1,0,-10deg); opacity:0; }
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg); opacity:1; }
         }
 
         @keyframes animatePrevLeft {
-        0%   { transform: translateY(-110%) rotate3d(0,1,0,-10deg); opacity:0; }
-        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg); opacity:1; }
+        0%   { transform: translateX(80px) translateY(20px) rotate3d(0,1,0,-10deg); opacity:0; }
+        100% { transform: scaleX(1) scaleY(1) rotate3d(0,1,0,-10deg) translateX(40px) translateY(10px); opacity:1; }
         }
 
         /* △ Users preferring reduced motion get instant swaps */
         @media (prefers-reduced-motion:reduce) {
         .skillCard { animation:none !important; transition:none !important; }
         }
+    }
 
+    @media (min-width: 601px) and (max-width: 1367px) {
+        .SkillsContainer {
+            width: 100vw;
+        }
+        .skillsDeck {
+            width: 100vw;
+            height: 70vh;
+            max-width: 100%;
+        }
     }
 </style>

@@ -1,7 +1,5 @@
-<!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
-<script>
-    import { run } from 'svelte/legacy';
 
+<script>
     import { onMount } from 'svelte';
     import { fade  } from 'svelte/transition';
     import SkillsDeck from '../utils/skillsDeck.svelte';
@@ -14,7 +12,7 @@
     let pauseElapsed = 0;
     let skillsDeckRef = $state();
 
-    function animate(t) {
+    async function animate(t) {
         if (startTime === null) startTime = t;
 
         if (!isPlaying) {
@@ -27,9 +25,9 @@
 
         if (progress >= 100) {
             if (window.innerWidth < 600) {
-                skillsDeckRef.updateCardIndex('prev');
+                await skillsDeckRef.updateCardIndex('prev');
             } else {
-                skillsDeckRef.updateCardIndex('next');
+                await skillsDeckRef.updateCardIndex('next');
             }
             setTimeout(() => {
                 progress = 0;
@@ -75,7 +73,7 @@
     });
 
     let previousSection = $state(null);
-	run(() => {
+	$effect(() => {
         if (skillsSection && observer) {
     		if (previousSection && previousSection !== skillsSection) {
     			observer.unobserve(previousSection);
@@ -123,7 +121,7 @@
 
         max-width: 100%;
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
 
         background: #f7f8fa;
 
@@ -187,6 +185,15 @@
 
     .hidden {
         display: none;
+    }
+
+    @media (max-width: 1366px) {
+        #playBar {
+            width: 80%;
+            min-height: 40px;
+            bottom: 2%;
+            left: 10%;
+        }
     }
 
     @media (max-width: 768px) {

@@ -1,7 +1,20 @@
 <script>
 	import { fly } from 'svelte/transition';
     import { onMount } from 'svelte';
-	
+
+	function nonpassiveWheel(node) {
+		function handler(e) {
+			if (showMenu) e.preventDefault();
+		}
+		window.addEventListener('wheel', handler, { passive: false });
+
+		return {
+		destroy() {
+			window.removeEventListener('wheel', handler, { passive: false });
+		}
+		};
+	}
+
 	let Title = "<Andrea Bertarione />";
 	let links = [
 		{
@@ -27,6 +40,7 @@
 	];
 
 	let showHero = $state(false);
+	let showMenu = $state(false);
 	
 	onMount(() => {
 		showHero = true;
@@ -42,9 +56,14 @@
 					<a class="navLink" href=" {link.to}">{link.name}</a>
 				{/each}
 			</div>
-			<div class="navMenuIcon"><picture><img src="menu.svg" alt="menu icon"></picture></div>
+			<button class="navMenuIcon" onclick={() => { showMenu = !showMenu; showMenu ? scrollTo({ top: 0, left: 0, behavior: 'instant'}) : ''}}><picture><img src="menu.svg" alt="menu icon"></picture></button>
 		</div>
 	</nav>
+	<div class="navMenu glass-effect" style="display: {showMenu ? "flex" : "none"}" use:nonpassiveWheel>
+		{#each links as link}
+			<a class="navLink" onclick={() => {showMenu = false; enableScroll();}} href=" {link.to}">{link.name}</a>
+		{/each}
+	</div>
 {/if}
 
 <style>
@@ -58,6 +77,7 @@
 
 		padding: 0px;
 		margin: 0px;
+		overflow: hidden;
 	}
 
 	.wrapper {
@@ -72,7 +92,7 @@
 
 		justify-content: space-between;
 	}
-
+	
 	nav p {
 		padding-right: 2rem;
 		padding-left: 10rem;
@@ -88,7 +108,7 @@
 		padding-left: 3rem;
 	}
 
-	.navList .navLink {
+	.navLink {
 		display: flex;
 		flex-direction: column;
 		gap: 1px;
@@ -98,11 +118,11 @@
 		transition: 0.15s;
 	}
 
-	.navList .navLink:hover {
+	.navLink:hover {
 		color: hsl(221, 83%, 53%);
 	}
 
-	.navList .navLink::after {
+	.navLink::after {
 		content: "";
 		display: inline-block;
 		width: 0%;
@@ -116,7 +136,7 @@
 		transition: 0.15s
 	}
 
-	.navList .navLink:hover::after {
+	.navLink:hover::after {
 		width: 100%;
 		height: 3px;
 	}
@@ -125,6 +145,30 @@
 		display: none;
 		padding-right: 1rem;
 		padding-left: 1rem;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+	}
+
+	.navMenu {
+		position: absolute;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		top: 7vh;
+		left: 0;
+		width: 100vw;
+		height: calc(100vh - 7vh);
+		z-index: 25;
+	}
+
+	.navMenu .navLink:nth-child(1) {
+		margin-top: 2rem;
+	}
+
+	.navMenu .navLink {
+		padding: 1rem;
+		font-size: 2rem;
 	}
 
 	@media (max-width: 1100px) {

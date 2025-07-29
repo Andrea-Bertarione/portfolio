@@ -49,7 +49,7 @@
 
 	:global(.gradient-text) {
 		background: linear-gradient(
-			0deg,
+			270deg,
 			hsl(221, 83%, 53%),
 			hsl(43, 96%, 56%)
 		);

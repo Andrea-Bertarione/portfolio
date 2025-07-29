@@ -101,7 +101,7 @@
 		
 		max-width:100%;
 		width: 100vw;
-		height: 100vh;
+		min-height: 100vh;
 
 		justify-content: start;
 		align-items: center;
@@ -203,7 +203,7 @@
 	}
 
 	.arrowDown {
-		position: absolute;
+		position: relative;
 
 		cursor: pointer;
 		
@@ -291,7 +291,7 @@
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (max-width: 768px) {
 		.mobile-hide { display: none; }
 		.mobile-only { display: block; }
 		
