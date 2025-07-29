@@ -8,15 +8,17 @@
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
-		"@sveltejs/adapter-static": "^2.0.3",
-		"@sveltejs/kit": "^1.20.4",
+		"@sveltejs/adapter-static": "^3.0.0",
+		"@sveltejs/kit": "^2.5.27",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"sk-seo": "^0.5.4",
-		"svelte": "^4.0.5",
+		"svelte": "^5.0.0",
 		"svelte-match-media": "^1.2.1",
-		"vite": "^4.5.1"
+		"vite": "^5.4.4"
 	},
 	"type": "module",
 	"dependencies": {
+		"svelte-gestures": "^5.1.4",
 		"vercel": "^44.5.3"
 	}
 }

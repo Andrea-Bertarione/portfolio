@@ -26,7 +26,7 @@
 		},
 	];
 
-	let showHero = false;
+	let showHero = $state(false);
 	
 	onMount(() => {
 		showHero = true;

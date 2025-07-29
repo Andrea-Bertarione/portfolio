@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
+    import { swipe } from 'svelte-gestures';
 
-
-    let skills = [
+    let skills = $state([
         {
             name: "JavaScript / TypeScript",
             level: "Expert",
@@ -94,7 +94,7 @@
             icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg",
             color: "#13aa52"
         },
-    ];
+    ]);
 
 
     const levels = {
@@ -222,6 +222,27 @@
         animRunning = false;
     }
 
+    function handlerSwipe(event) {
+        direction = event.detail.direction;
+        target = event.detail.target;
+        pointerType = event.detail.pointerType;
+
+        if (window.innerWidth < 600) {
+            if (direction === 'top') {
+                updateCardIndex('next');
+            } else if (direction === 'bottom') {
+                updateCardIndex('prev');
+            }
+        }
+        else {
+            if (direction === 'left') {
+                updateCardIndex('next');
+            } else if (direction === 'right') {
+                updateCardIndex('prev');
+            }
+        }
+    }
+
 
     onMount(() => {
         window.addEventListener('keydown', (e) => {
@@ -248,8 +269,8 @@
 </script>
 
 
-<div class="SkillsContainer">
-    <div class="skillsDeck">
+<div class="SkillsContainer" >
+    <div class="skillsDeck" >
         {#each skills as skill, index}
             <div class="skillCard {skill.focussed} {skill.animation}" style="{getCardBg(skill)}" id={index}>
                 <div class="iconCircle">
@@ -528,7 +549,7 @@
             width: 100%;
             margin-left: 0;
             padding-right: 20px;
-            margin-bottom: 20vh;
+            padding-bottom: 15vh;
             overflow: hidden
         }
         .skillsDeck {

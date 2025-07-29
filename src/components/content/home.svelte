@@ -24,14 +24,14 @@
 		"<First Level IT Support/>"
 	];
 
-	let showHero = false;
+	let showHero = $state(false);
 
 	let comment = "<!-- I have a lot of other skills too, press this to see them -->"
 	let profText = "<Professions>";
 	let profTextEnd = "</Professions>";
 
 	// Typewriter effect state
-	let currentProfession = '';
+	let currentProfession = $state('');
 	let profIndex = 0;
 	let charIndex = 0;
 	let typing = true;

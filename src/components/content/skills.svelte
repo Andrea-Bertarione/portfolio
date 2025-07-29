@@ -1,15 +1,18 @@
+<!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
 <script>
-    import { onMount, afterUpdate  } from 'svelte';
+    import { run } from 'svelte/legacy';
+
+    import { onMount } from 'svelte';
     import { fade  } from 'svelte/transition';
     import SkillsDeck from '../utils/skillsDeck.svelte';
 
     const time = 10000;
-    let isPlaying = true;
-    let progress = 0;
+    let isPlaying = $state(true);
+    let progress = $state(0);
     let animationFrame;
     let startTime = null;
     let pauseElapsed = 0;
-    let skillsDeckRef;
+    let skillsDeckRef = $state();
 
     function animate(t) {
         if (startTime === null) startTime = t;
@@ -47,17 +50,10 @@
         }
     };
 
-    let showHero = false;
-    let sectionVisible = false;
-	let skillsSection;
-	let observer;
-
-    afterUpdate(() => {
-        if (showHero && window.location.hash === '#Skills') {
-            const el = document.getElementById('Skills');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
+    let showHero = $state(false);
+    let sectionVisible = $state(false);
+	let skillsSection = $state();
+	let observer = $state();
 
     onMount(() => {
         showHero = true;
@@ -78,14 +74,16 @@
         };
     });
 
-    let previousSection = null;
-	$: if (skillsSection && observer) {
-		if (previousSection && previousSection !== skillsSection) {
-			observer.unobserve(previousSection);
-		}
-		observer.observe(skillsSection);
-		previousSection = skillsSection;
-	}
+    let previousSection = $state(null);
+	run(() => {
+        if (skillsSection && observer) {
+    		if (previousSection && previousSection !== skillsSection) {
+    			observer.unobserve(previousSection);
+    		}
+    		observer.observe(skillsSection);
+    		previousSection = skillsSection;
+    	}
+    });
 </script>
 
 {#if showHero}
@@ -97,7 +95,7 @@
                 <div class="bar">
                     <div class="fill" style="width: {progress}%;"></div>
                 </div>
-                <button on:click={playPause} class="Play">
+                <button onclick={playPause} class="Play">
                     <img
                         class="{isPlaying ? 'hidden' : 'shown'}"
                         src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.0/svgs/solid/play.svg"

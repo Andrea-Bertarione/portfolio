@@ -1,4 +1,6 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
 	import aboutText from "../data/aboutme"
 	import { fade  } from 'svelte/transition';
@@ -42,14 +44,14 @@
 	let age = calcAge(new Date(2004, 6, 13));
 	let experience = calcAge(new Date(2018, 3, 12));
 
-	let showHero = false;
+	let showHero = $state(false);
 
-	let aboutMe = aboutText({ age, experience });
+	let aboutMe = $state(aboutText({ age, experience }));
 	let extended = false;
 
-	let sectionVisible = false;
-	let aboutSection;
-	let observer;
+	let sectionVisible = $state(false);
+	let aboutSection = $state();
+	let observer = $state();
 
 	onMount(() => {
 		showHero = true;
@@ -66,14 +68,16 @@
 		);
 	});
 
-	let previousSection = null;
-	$: if (aboutSection && observer) {
-		if (previousSection && previousSection !== aboutSection) {
-			observer.unobserve(previousSection);
+	let previousSection = $state(null);
+	$effect(() => {
+		if (aboutSection && observer) {
+			if (previousSection && previousSection !== aboutSection) {
+				observer.unobserve(previousSection);
+			}
+			observer.observe(aboutSection);
+			previousSection = aboutSection;
 		}
-		observer.observe(aboutSection);
-		previousSection = aboutSection;
-	}
+	});
 </script>
 
 {#if showHero}
