@@ -3,6 +3,7 @@
 	import Home from "../components/content/home.svelte";
 	import About from "../components/content/about.svelte";
 	import Skills from "../components/content/skills.svelte";
+	import Projects from "../components/content/projects.svelte";
 </script>
 
 
@@ -11,6 +12,7 @@
 	<Home />
 	<About />
 	<Skills />
+	<Projects />
 </section>
 
 <style>

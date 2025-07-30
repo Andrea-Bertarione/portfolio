@@ -15,14 +15,7 @@
 		"Digital solutions with code, creativity, and design.",
 	];
 
-	let professions = [
-		 "<Backend Developer />",
-		"<Full Stack Developer />",
-		"<Software Developer />",
-		"<Discord Bot Developer />",
-		"<Game Developer />",
-		"<First Level IT Support/>"
-	];
+	let professions = [];
 
 	let showHero = $state(false);
 
@@ -66,9 +59,15 @@
 	// Start the effect on mount
 	import { onMount } from 'svelte';
 	
-	onMount(() => {
+	onMount(async () => {
 		showHero = true;
-		typeProfession();
+
+		const professionsRes = await fetch('/api/professions');
+		if (professionsRes.ok) {
+			professions = await professionsRes.json();
+			typeProfession();
+		}
+		
 	});
 </script>
 
