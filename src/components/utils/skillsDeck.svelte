@@ -563,10 +563,10 @@
 
     @media (min-width: 601px) and (max-width: 1367px) {
         .SkillsContainer {
-            width: 100vw;
+            width: 100%;
         }
         .skillsDeck {
-            width: 100vw;
+            width: 100%;
             height: 70vh;
             max-width: 100%;
         }

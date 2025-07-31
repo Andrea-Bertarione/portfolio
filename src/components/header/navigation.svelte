@@ -50,7 +50,10 @@
 {#if showHero}
 	<nav class="hero-gradient">
 		<div class="glass-effect wrapper">
-			<p class="gradient-text margin-auto" in:fly ={{ y: -200, delay: 200 }}>{Title}</p>
+			<div class="wrapperTitle margin-auto" in:fly ={{ y: -200, delay: 200 }}>
+				<img src="iconportfolio.svg" alt="logo" class="logo" />
+				<p class="gradient-text">{Title}</p>
+			</div>
 			<div class="navList margin-auto" in:fly ={{ x: 1000, delay: 200, duration: 1000 }}>
 				{#each links as link}
 					<a class="navLink" href=" {link.to}">{link.name}</a>
@@ -106,6 +109,35 @@
 
 		padding-right: 12rem;
 		padding-left: 3rem;
+	}
+
+	.wrapperTitle {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		padding-right: 2rem;
+		padding-left: 2rem;
+
+		margin-left: 5rem;
+		margin-right: auto;
+
+		transition: color 0.15s;	
+	}
+
+	.wrapperTitle p {
+		padding-left: 1rem;
+	}
+
+	.logo {
+		min-width: 25px;
+		min-height: 25px;
+		width: auto;
+		height: 90%;
+		max-height: 40px;
+		max-width: 40px;
+		object-fit: contain;
+		margin-left: 2rem;
 	}
 
 	.navLink {
@@ -172,23 +204,48 @@
 	}
 
 	@media (max-width: 1100px) {
-		nav p {
-			padding-left: 4rem;
+		.wrapperTitle {
+			margin-left: 2rem;
+			margin-right: auto;
 		}
+
+		.navList {
+			padding-right: 2rem;
+			padding-left: 1.5rem;
+		}
+
 	}
 
 	@media (max-width: 930px) {
+		.wrapperTitle {
+			margin-left: 0.5rem;
+			margin-right: auto;
+		}
+
+		.wrapperTitle p {
+			font-size: 1.2rem;
+		}
+
 		.navList {
 			padding-right: 2rem;
-			padding-left: 2rem;
+			padding-left: 1.5rem;
+		}
+
+		.navLink {
+			font-size: 0.7rem;
 		}
 	}
 
 	@media (max-width: 770px) {
-		nav p {
-			font-size: 22px;
-			padding-right: 3rem;
-			padding-left: 3rem;
+		.wrapperTitle {
+			margin-left: 0px;
+			padding-left: 0px;
+			padding-right: 0px;
+			margin-right: auto;
+		}
+
+		.wrapperTitle p {
+			font-size: 1.5 rem;
 		}
 
 		.navList {
@@ -201,10 +258,8 @@
 	}
 
 	@media (max-width: 450px) {
-		nav p {
-			font-size: 20px;
-			padding-right: 1rem;
-			padding-left: 1rem;
+		.wrapperTitle p {
+			font-size: 1rem;
 		}
 	}
 
