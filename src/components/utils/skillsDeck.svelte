@@ -181,6 +181,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 100%;
         height: 100%;
         margin-left: 30px;
         margin-right: 30px;
@@ -193,7 +194,7 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
         max-width: 1050px;
-        width: 60vw;
+        width: 60%;
         height: 70vh;
         margin: 0 auto;
         align-items: center;

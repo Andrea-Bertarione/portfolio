@@ -120,7 +120,7 @@
         flex-direction: column;
 
         max-width: 100%;
-        width: 100vw;
+        width: 100%;
         min-height: 100vh;
 
         background: #f7f8fa;
