@@ -16,6 +16,10 @@
 </section>
 
 <style>
+	:global(html, body) {
+		overflow-x: clip;
+	}
+
 	:root {
 		--font-body: Arial, -apple-system, BlinkMacSystemFont, "Segoe UI",
 			Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",

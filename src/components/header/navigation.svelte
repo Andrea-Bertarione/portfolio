@@ -80,7 +80,6 @@
 
 		padding: 0px;
 		margin: 0px;
-		overflow: hidden;
 	}
 
 	.wrapper {
@@ -260,6 +259,10 @@
 	@media (max-width: 450px) {
 		.wrapperTitle p {
 			font-size: 1rem;
+		}
+
+		.logo {
+			margin-left: 0.5rem;
 		}
 	}
 

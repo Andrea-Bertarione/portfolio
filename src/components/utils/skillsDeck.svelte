@@ -195,7 +195,9 @@
         gap: 1rem;
         max-width: 1050px;
         width: 60%;
-        height: 70vh;
+        height: auto;
+        min-height: 60vh;
+        max-height: 80vh;
         margin: 0 auto;
         align-items: center;
         perspective: 1200px;
@@ -442,18 +444,20 @@
     @media (max-width: 600px) {
         .SkillsContainer {
             width: 100%;
+            min-height: 60vh;
             margin-left: 0;
             padding-right: 20px;
             padding-bottom: 10vh;
-            overflow: hidden
+            
         }
         .skillsDeck {
             display: grid;
             grid-template-columns: 1fr;
             gap: 0.25rem;
             width: 70vw;
-            height: 60vh;
             max-width: 750px;
+            min-height: 40vh;
+            max-height: 60vh;
             margin: 0 auto;
             align-items: center;
             perspective: 1200px;
