@@ -4,6 +4,7 @@
 	import About from "../components/content/about.svelte";
 	import Skills from "../components/content/skills.svelte";
 	import Projects from "../components/content/projects.svelte";
+	import Contacts from "../components/content/contacts.svelte";
 </script>
 
 
@@ -13,6 +14,7 @@
 	<About />
 	<Skills />
 	<Projects />
+	<Contacts />
 </section>
 
 <style>

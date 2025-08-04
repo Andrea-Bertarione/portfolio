@@ -80,7 +80,7 @@
 		<p class="sub mobile-hide" in:fly ={{ y: 200, delay: 240 }}>{text[4]}</p>
 		<p class="sub mobile-only" in:fly ={{ y: 200, delay: 300 }}>{textMobile[0]}</p>
 		<code class="medium" in:fly ={{ y: 200, delay: 450 }}>
-			<a class="comment" href="/#skills">{comment}</a>
+			<a class="comment" href="/#Skills">{comment}</a>
 			<p class="gradient-text">{profText}</p>
 			<p class="tab gradient-text">{currentProfession}<span class="cursor">|</span></p>
 			<p class="gradient-text">{profTextEnd}</p>
