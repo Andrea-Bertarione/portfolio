@@ -1,6 +1,6 @@
-
 <script>
     import { onMount } from 'svelte';
+    import ProjectPreview from '../comp/projectPreview.svelte';
 
     let projects = $state([]);
     let languages = $state([]);
@@ -12,20 +12,30 @@
 
     let showHero = $state(false);
 
+    // Your existing updateData function (unchanged)
     const updateData = async () => {
         const projectsRes = await fetch('/api/github-projects');
         if (projectsRes.ok) {
             projects = await projectsRes.json();
             if (projects.length > 0) {
+                // Add slug generation
+                let id = 0;
+                projects = projects.map(project => ({
+                    ...project,
+                    id: id++,
+                    slug: project.name.toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/[\s_-]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+                }));
+
                 languages = [...new Set(projects.map(p => p.language).filter(Boolean))];
                 topics = [...new Set(projects.flatMap(p => p.topics || []))];
 
                 if (topics.length > 0) {
-                                      
                     projects = projects.map(project => {
                         if (project.topics) {
                             const cleanTopics = [];
-
                             project.topicsHidden = true;
                             
                             project.topics.forEach(topic => {
@@ -61,20 +71,41 @@
         }
     }
 
+    function scrollToProjectsAndClearFlag() {
+        const el = document.getElementById('Projects');
+        if (el) {
+            el.scrollIntoView({ behavior: 'instant' });
+            import('$app/navigation').then(({ replaceState }) => {
+            replaceState(
+                "/",
+                { scrollToProjects: false }
+            );
+            });
+        } else {
+            // Retry in a tick if not yet rendered
+            setTimeout(scrollToProjectsAndClearFlag, 10);
+        }
+    }
+
     onMount(async () => {
         showHero = true;
+        const skState = history.state?.['sveltekit:states'];
+        if (skState && skState.scrollToProjects) {
+            scrollToProjectsAndClearFlag();
+        }
 
         await updateData();
     });
 </script>
 
 {#if showHero}
-    <section id="Projects" >
+    <section id="Projects">
         <h2>Dynamic Projects</h2>
         <div class="wrapText">
             <p><span class="gradient-text">They really are Dynamic</span> 😉</p>
             <p class="hint">Hover to find out what 'Dynamic' means in this context</p>
         </div>
+        
         <div class="filters">
             <div>
                 <label for="language">Filter by Language:</label>
@@ -97,6 +128,7 @@
                 </select>
             </div>
         </div>
+        
         <div class="projects-container">
             {#if projects.length > 0}
                 {#each projects as project}
@@ -107,12 +139,12 @@
                         onclick={() => selectProject(project)}
                         onkeydown={e => {
                             if (e.key === "Enter" || e.key === " ") {
-                            selectProject(e);
+                                selectProject(project);
                             }
                         }}
                         class="project-card"
                         style="background: {project.color}; display: {(!selectedLanguage || project.language === selectedLanguage) && (!selectedTopic || project.topics?.includes(selectedTopic)) ? 'flex' : 'none'};"
-                        >
+                    >
                         <div class="topics">
                             <ul>
                                 {#if project.language}
@@ -130,12 +162,11 @@
                         {#if project.banner}
                             <img src="/{project.banner}.svg" alt={project.name}>
                         {/if}
-                         <h3>{project.name}</h3>
+                        <h3>{project.name}</h3>
                         <p>{project.description}</p>
                         <div>
                             <a class="project-link" href={project.github} target="_blank">View on GitHub</a>
                         </div>
-                        
                     </div>
                 {/each}
             {:else}
@@ -144,6 +175,11 @@
         </div>
     </section>
 {/if}
+
+<ProjectPreview 
+    bind:selectedProject 
+    {projects} 
+/>
 
 <style>
     section {
@@ -277,6 +313,7 @@
         max-width: 1200px;
         perspective: 1200px;
         justify-items: center;
+        margin-bottom: 30px;
     }
 
     .project-card {
@@ -300,7 +337,6 @@
     .project-card:hover {
         transform: scale(1.05) translateY(-10px);
         filter: brightness(0.95);
-        box-shadow: 0px 0px 12px 8px #000000;
     }
 
     .project-card h3 {

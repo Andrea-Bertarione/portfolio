@@ -2,7 +2,7 @@
 <script>
     import { onMount } from 'svelte';
     import { fade  } from 'svelte/transition';
-    import SkillsDeck from '../utils/skillsDeck.svelte';
+    import SkillsDeck from '../comp/skillsDeck.svelte';
 
     const time = 10000;
     let isPlaying = $state(true);
