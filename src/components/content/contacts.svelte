@@ -9,11 +9,23 @@
             icon: "/icongithub.svg",
         },
         {
+            name: "Discord",
+            link: "https://discord.com/users/1402182554219712573",
+            color: "#5865F2",
+            icon: "/icondiscord.svg",
+        },
+        {
             name: "Contact me via Email",
             link: "mailto:Andrea.bertarione@gmail.com?subject=Interested%20in%20working%20with%20you&body=Hi Andrea,%20Im%20interested%20in%20working%20with%20you!",
             color: "#f20606",
             icon: "/iconmail.svg",
-        }
+        },
+        {
+            name: "Take a look at my CV",
+            link: "/Andrea Bertarione CV 2025.pdf",
+            color: "#4da23f",
+            icon: "/iconcv.svg",
+        },
     ]);
 
     let showHero = $state(false);
@@ -92,7 +104,6 @@
         submissionStatus = 'submitting';
         
         try {
-            // Replace with your actual endpoint or email service
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
@@ -103,10 +114,8 @@
             
             if (response.ok) {
                 submissionStatus = 'success';
-                // Reset form after 3 seconds
                 setTimeout(() => {
                     closeModal();
-                    // Reset the initial form too
                     document.getElementById('quick-contact-form').reset();
                     formData = { name: '', email: '', reason: '', description: '' };
                 }, 3000);
@@ -773,6 +782,7 @@
         .separator {
             flex-direction: column;
             gap: 2rem;
+            margin-bottom: 20px;
         }
         
         .form, .links {
@@ -802,6 +812,12 @@
 
         h3 {
             font-size: 1.5rem;
+        }
+
+        .submit-btn {
+            justify-self: center;
+            align-self: center;
+            margin-top: 20px;
         }
     }
 </style>

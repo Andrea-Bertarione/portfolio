@@ -91,7 +91,7 @@
 		</div>
 	</div>
 	{#if sectionVisible}
-		<button id="CVDownload" transition:fade={{ delay: 60, duration: 150 }}>Download CV</button>
+		<a id="CVDownload" href="/Andrea Bertarione CV 2025.pdf" download="Andrea Bertarione CV 2025.pdf" transition:fade={{ delay: 60, duration: 150 }}>Download CV</a>
 	{/if}
 </section>
 {/if}
@@ -157,6 +157,12 @@
 		font-size: 16px;
 		font-weight: 600;
 		cursor: pointer;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		text-decoration: none;
 
 		box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 		transition: opacity 0.2s;
