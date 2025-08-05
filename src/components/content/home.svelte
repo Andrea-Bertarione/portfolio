@@ -73,7 +73,7 @@
 
 {#if showHero}
 	<section id="#" class="hero-gradient">
-		<p class="orange small" id="intro" in:fly ={{ y: 200 }}>{text[0]}</p>
+		<p class="small gradient-text" id="intro" in:fly ={{ y: 200 }}>{text[0]}</p>
 		<h1 class="big" id="name" in:fly ={{ y: 200, delay: 60 }}>{text[1]}</h1>
 		<p class="sub mobile-hide" in:fly ={{ y: 200, delay: 120 }}>{text[2]}</p>
 		<p class="sub mobile-hide" in:fly ={{ y: 200, delay: 180 }}>{text[3]}</p>
@@ -170,7 +170,7 @@
 	}
 
 	.buttonsHor .first {
-		background: hsl(221, 83%, 53%);
+		background: linear-gradient(270deg, hsl(221, 83%, 53%), hsl(43, 96%, 56%));
 		color: white;
 
 		transition: 0.15s;
@@ -245,10 +245,6 @@
 	.big {
 		font-size: 72px;
 		font-weight: 900;
-	}
-
-	.orange {
-		color: orange;
 	}
 
 	.comment {

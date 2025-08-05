@@ -792,6 +792,10 @@
         .wrap {
             flex-direction: column;
         }
+
+        .form-summary {
+            width: 90%;
+        }
         
         .modal-content {
             width: 95%;
