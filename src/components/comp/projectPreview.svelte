@@ -260,12 +260,12 @@
                 
                 <!-- Action buttons -->
                 <div class="action-buttons">
-                    <a href={selectedProject.html_url} target="_blank" class="btn-primary">
+                    <a href={selectedProject.github} target="_blank" class="btn-primary">
                         <span>📂</span> View on GitHub
                     </a>
-                    {#if selectedProject.homepage}
-                        <a href={selectedProject.homepage} target="_blank" class="btn-secondary">
-                            <span>🚀</span> Live Demo
+                    {#if selectedProject.demo}
+                        <a href={selectedProject.demo} target="_blank" class="btn-secondary">
+                            <span>🚀</span> Live Project
                         </a>
                     {/if}
                 </div>
