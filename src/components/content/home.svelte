@@ -170,7 +170,7 @@
 	}
 
 	.buttonsHor .first {
-		background: linear-gradient(270deg, hsl(221, 83%, 53%), hsl(43, 96%, 56%));
+		background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(43, 96%, 56%));
 		color: white;
 
 		transition: 0.15s;
