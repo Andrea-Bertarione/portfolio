@@ -68,30 +68,6 @@ This portfolio represents my journey as a backend developer and lifelong learner
 - **Modern Typography**: Fira Mono font integration
 - **Professional Imagery**: Optimized profile photos and assets[10]
 
-## 🗂️ Project Structure
-
-src/
-├── components/
-│ ├── content/ # Main content sections
-│ │ ├── home.svelte # Hero section with typewriter effect
-│ │ ├── about.svelte # Personal story and background
-│ │ └── skills.svelte # Skills showcase container
-│ ├── data/ # Content data and configuration
-│ │ └── aboutme.js # Personal information template
-│ ├── header/ # Navigation components
-│ │ └── navigation.svelte # Main navigation bar
-│ ├── interactiveSVG/ # Custom SVG components
-│ │ ├── arrowD.svelte # Down arrow component
-│ │ └── arrowR.svelte # Right arrow component
-│ └── utils/ # Utility components
-│ └── skillsDeck.svelte # Swipeable skills interface
-├── lib/images/ # Static image assets
-├── routes/ # SvelteKit routing
-│ └── +page.svelte # Main page component
-└── app.html # HTML template
-
-text
-
 ## 🚀 Getting Started
 
 ### Prerequisites

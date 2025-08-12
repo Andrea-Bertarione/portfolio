@@ -824,4 +824,57 @@
             margin-top: 20px;
         }
     }
+
+    @media (max-width: 1200px) {
+        .separator {
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .form, .links {
+            width: 100%;
+        }
+        
+        .wrap {
+            flex-direction: column;
+        }
+
+        .form-summary {
+            width: 90%;
+        }
+        
+        .modal-content {
+            width: 95%;
+            margin: 1rem;
+        }
+        
+        .modal-header, .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .box {
+            width: 90%;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        input {
+            width: 60%;
+            height: 50px;
+        }
+
+        .submit-btn {
+            justify-self: center;
+            align-self: center;
+            margin-top: 20px;
+            height: 67px;
+        }
+    }
 </style>

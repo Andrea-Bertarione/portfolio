@@ -564,6 +564,7 @@
         padding: 20px;
         max-height: 400px;
         overflow-y: auto;
+        color:rgb(36, 36, 36)
     }
     
     .readme-content :global(h1),
@@ -586,9 +587,64 @@
         border-radius: 3px;
         font-size: 0.9em;
     }
-    
+
+    .readme-content :global(.octicon) {
+        display: none;
+    }
+
+    .readme-content :global(markdown-accessiblity-table) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .readme-content :global(table) {
+        border-collapse: collapse;
+        width: max(65rem, 100%);
+        table-layout: fixed;
+    }
+
+    .readme-content :global(td) {
+        border: 1px solid lightgrey;
+        padding: 0.25rem 0.75rem;
+        vertical-align: baseline;
+        text-align: center;
+    }
+
+    .readme-content :global(th) {
+        border: 1px solid lightgrey;
+        padding: 0.25rem 0.75rem;
+        vertical-align: baseline;
+    }
+
+    .readme-content :global(th:first-child) {
+        position: sticky;
+        inset-inline-start: 0;
+        border-inline-end: none;
+    }
+
+    .readme-content :global(thead) {
+        border-block-end: 2px solid;
+        background: whitesmoke;
+    }
+
+    .readme-content :global(tfoot) {
+        border-block: 2px solid;
+        background: whitesmoke; 
+    }
+
+    .readme-content :global(th:first-child::after) {
+        content: '';
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-end: 0;
+        width: 1px;
+        height: 100%;
+        background: lightgrey;
+    }
+        
     .no-readme {
-        color: #6b7280;
+        color: #2d2e30;
         font-style: italic;
         text-align: center;
         padding: 40px;
