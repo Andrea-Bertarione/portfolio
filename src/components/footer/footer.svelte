@@ -31,8 +31,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: calc(100% - 4rem);
-        max-width: calc(100% - 4em);
+        width: 100%;
+        max-width: 100%;
         min-height: 40vh;
         padding: 2rem 1rem;
         margin-top: 4rem;
